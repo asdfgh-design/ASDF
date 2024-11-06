@@ -1,0 +1,73 @@
+A) SISO MAIN CODE
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use  IEEE.STD_LOGIC_unsigned.ALL;
+
+entity SISO is
+    Port ( in1 : in STD_LOGIC;
+           clk : in STD_LOGIC;
+           slow_clk:inout std_logic;
+           out1 : out STD_LOGIC);
+end SISO;
+
+architecture Behavioral of SISO is
+    signal q:std_logic_vector(3 downto 0);
+    signal counter: std_logic_vector(25 downto 0):=(others =>'0');
+   
+begin
+process(slow_clk,in1)
+begin
+    if(slow_clk'event and slow_clk='1')then
+    q(3 downto 1) <= q(2 downto 0);
+    q(0)<= in1;
+    out1 <= q(3);
+    end if;
+end process;
+process(clk)
+begin
+if (clk'event and clk='1')then
+ counter <=counter+'1';
+ end if;
+ end process;
+slow_clk <= counter(0);
+end Behavioral;
+
+
+B) SISO Testbench
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity SISO_tb is
+--  Port ( );
+end SISO_tb;
+
+architecture Behavioral of SISO_tb is
+ component SISO is
+     port( in1 : in STD_LOGIC;
+            clk : in STD_LOGIC;
+            slow_clk:inout std_logic;
+            out1 : out STD_LOGIC);
+ end component;
+ signal in1,clk,out1,slow_clk:std_logic;
+begin
+U1:SISO port map(in1,clk,slow_clk,out1);
+process
+begin
+    clk <='1';
+    wait for 50 ns;
+    clk <='0';
+    wait for 50 ns;
+end process;
+
+process
+begin
+    in1 <='0';
+    wait for 160 ns;
+    in1 <='1';
+    wait for 80 ns;
+end process;
+
+end Behavioral;

@@ -1,0 +1,95 @@
+FULL ADDER CODE
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity full_adder is
+Port ( a : in STD_LOGIC;
+           b : in STD_LOGIC;
+           cin : in STD_LOGIC;
+           s : out STD_LOGIC;
+           cout : out STD_LOGIC);
+end full_adder;
+
+architecture Behavioral of full_adder is
+
+begin
+ s <= a xor b xor cin;
+ cout <= (a and b) or (b and cin ) or (cin and a);
+
+end Behavioral;
+
+
+
+
+C) RCA Code :-
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity RCA is
+    Port ( a : in STD_LOGIC_VECTOR (3 downto 0);
+           b : in STD_LOGIC_VECTOR (3 downto 0);
+           Sum : out STD_LOGIC_VECTOR (3 downto 0);
+           Cout : out STD_LOGIC;
+           Cin : in STD_LOGIC);
+end RCA;
+
+architecture Behavioral of RCA is
+COMPONENT full_adder is
+    Port ( a : in STD_LOGIC;
+           b : in STD_LOGIC;
+           cin : in STD_LOGIC;
+           s : out STD_LOGIC;
+           cout : out STD_LOGIC);
+end COMPONENT;
+signal temp:std_logic_vector(3 downto 0);
+begin
+u1: full_adder port map(a(0),b(0),cin,sum(0),temp(0));
+u2: full_adder port map(a(1),b(1),temp(0),sum(1),temp(1));
+u3: full_adder port map(a(2),b(2),temp(1),sum(2),temp(2));
+u4: full_adder port map(a(3),b(3),temp(2),sum(3),cout);
+
+end Behavioral;
+
+
+
+
+
+
+
+RCA Test Bench:-
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity RCA_tb is
+--  Port ( );
+end RCA_tb;
+
+architecture Behavioral of RCA_tb is
+component RCA is
+    Port ( a : in STD_LOGIC_VECTOR (3 downto 0);
+           b : in STD_LOGIC_VECTOR (3 downto 0);
+           Sum : out STD_LOGIC_VECTOR (3 downto 0);
+           Cout : out STD_LOGIC;
+           Cin : in STD_LOGIC);
+end component;
+signal a,b,sum : std_logic_vector(3 downto 0);
+signal cout,cin : std_logic;
+begin
+u1: RCA port map(a,b,sum,cout,cin);
+process
+begin
+a<="0101";
+b<="1010";
+cin<='1';
+wait for 200 ns;
+
+a<="1101";
+b<="1000";
+cin<='0';
+wait for 200 ns;
+
+end process;
+end Behavioral;

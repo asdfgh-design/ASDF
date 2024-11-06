@@ -1,0 +1,60 @@
+A) HALF ADDER Code:-
+library IEEE;
+
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity HA is
+    Port ( a : in STD_LOGIC;
+           b : in STD_LOGIC;
+           sum : out STD_LOGIC;
+           carry : out STD_LOGIC);
+end HA;
+
+architecture Behavioral of HA is
+
+begin
+sum<= a xor b;
+carry<= a and b;
+
+end Behavioral;
+
+
+
+
+
+HALF ADDER Test Bench:-
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity HA_tb is
+--  Port ( );
+end HA_tb;
+
+architecture Behavioral of HA_tb is
+component HA is
+    Port ( a : in STD_LOGIC;
+           b : in STD_LOGIC;
+           sum : out STD_LOGIC;
+           carry : out STD_LOGIC);
+end component;
+signal a,b,sum,carry:STD_LOGIC;
+begin
+U1: HA port map(a,b,sum,carry);
+process
+begin
+a<='0';
+b<='0';
+wait for 100ns;
+a<='0';
+b<='1';
+wait for 100ns;
+a<='1';
+b<='0';
+wait for 100ns;
+a<='1';
+b<='1';
+wait for 100ns;
+end process;
+
+end Behavioral;

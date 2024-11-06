@@ -1,0 +1,90 @@
+A) Pipo Main Code
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity pipo is
+    Port ( clk : in STD_LOGIC;
+           slow_clk: inOUT STD_LOGIC;
+           load1 : in STD_LOGIC;
+           in4 : in STD_LOGIC_VECTOR (3 downto 0);
+           out4 : inout STD_LOGIC_VECTOR (3 downto 0));
+end pipo;
+
+architecture Behavioral of pipo is
+signal counter: std_logic_vector(1 downto 0):=(others =>'0');
+signal s4:STD_LOGIC_VECTOR(3 DOWNTO 0);
+begin
+	process(slow_clk,in4,load1,out4)
+	begin
+		if(load1='1') THEN
+			s4 <= in4;
+		else
+			s4 <= out4;
+		end if;
+		if(slow_clk'EVENT and slow_clk='1') THEN
+			out4 <= s4;
+		end if;
+	end process;
+process(clk)
+      begin
+         if (clk'event and clk='1')then
+          counter <=counter+'1';
+         end if;
+         end process;
+     slow_clk <= counter(1);
+end Behavioral;
+
+
+
+
+
+
+
+B) Pipo Tb
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity pipo_tb is
+--  Port ( );
+end pipo_tb;
+
+architecture Behavioral of pipo_tb is
+
+component pipo is
+    Port ( clk : in  STD_LOGIC;
+           slow_clk: inout STD_LOGIC;
+	       load1 :in STD_LOGIC;
+           in4 : in  STD_LOGIC_VECTOR (3 downto 0);
+           out4 : inout  STD_LOGIC_VECTOR (3 downto 0));
+end component;
+
+signal clk,slow_clk, load1: std_logic;
+signal in4,out4 : std_logic_vector( 3 downto 0);
+
+begin
+ u1: pipo port map ( clk,slow_clk,load1,in4,out4);
+
+process
+begin
+clk<= '0';
+wait for 10 ns;
+clk<= '1';
+wait for 10 ns ;
+end process;
+
+process
+begin
+load1<= '1';
+in4<= "1010";
+wait for 300 ns;
+load1<= '0';
+in4<= "0011";
+wait for 100 ns;
+load1<= '1';
+in4<= "1111";
+wait for 150 ns ;
+end process;
+end Behavioral;
