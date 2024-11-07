@@ -1,0 +1,143 @@
+A) OR GATE CODE:
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity or_gate is
+  Port ( p : in STD_LOGIC;
+          q : in STD_LOGIC;
+          r : out STD_LOGIC);
+end or_gate;
+
+architecture Behavioral of or_gate is
+
+begin
+
+r<= p or q;
+end Behavioral;
+
+
+
+
+B) HALF ADDER CODE:
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity half_adder is
+    Port ( a : in STD_LOGIC;
+           b : in STD_LOGIC;
+           s : out STD_LOGIC;
+           c : out STD_LOGIC);
+end half_adder;
+
+architecture Behavioral of half_adder is
+
+begin
+ s <= a xor b ;
+ c<= (a and b);
+
+end Behavioral;
+
+
+
+C) FULL ADDER Using Half Adders :-
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity full_adderst is
+    Port ( a : in STD_LOGIC;
+           b : in STD_LOGIC;
+           cin : in STD_LOGIC;
+           s : out STD_LOGIC;
+           cout : out STD_LOGIC);
+end full_adderst;
+
+architecture Structural of full_adderst is
+component half_adder is
+    Port ( a : in STD_LOGIC;
+           b : in STD_LOGIC;
+           s : out STD_LOGIC;
+           c : out STD_LOGIC);
+end component;
+
+component or_gate is
+    Port ( p : in STD_LOGIC;
+           q : in STD_LOGIC;
+           r : out STD_LOGIC);
+end component;
+signal temp1,temp2,temp3 : std_logic;
+begin
+u1: half_adder port map(a,b,temp1,temp2);
+u2: half_adder port map(temp1,cin,s,temp3);
+u3: or_gate port map(temp2,temp3,cout);
+end Structural;
+
+
+
+
+
+
+
+
+
+
+
+D) Test Bench-
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity full_addertb is
+--  Port ( );
+end full_addertb;
+
+architecture Behavioral of full_addertb is
+component full_adderst is
+    Port ( a : in STD_LOGIC;
+           b : in STD_LOGIC;
+           cin : in STD_LOGIC;
+           s : out STD_LOGIC;
+           cout : out STD_LOGIC);
+end component;
+signal a,b,cin,s,cout : std_logic;
+
+begin
+u1 : full_adderst port map(a,b,cin,s,cout);
+process
+begin
+--stimuli generation
+a<='0';
+b<='0';
+cin<='0';
+wait for 100ns;
+a<='0';
+b<='0';
+cin<='1';
+wait for 100ns;
+a<='0';
+b<='1';
+cin<='0';
+wait for 100ns;
+a<='0';
+b<='1';
+cin<='1';
+wait for 100ns;
+a<='1';
+b<='0';
+cin<='0';
+wait for 100ns;
+a<='1';
+b<='0';
+cin<='1';
+wait for 100ns;
+a<='1';
+b<='1';
+cin<='0';
+wait for 100ns;
+a<='1';
+b<='1';
+cin<='1';
+wait for 100ns;
+end process;
+end Behavioral;
